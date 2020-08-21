@@ -1,0 +1,79 @@
+---
+title: "Name of Analysis"
+subtitle: "Data Analysis Group"
+author: "Your Name"
+date: "The Date"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+params:
+  audience:
+    label: Audience
+    value: All Content + Code
+    input: radio
+    choices:
+    - Executive Summary
+    - Stakeholder
+    - All Content + Code
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Insert all required packages here
+```
+
+<!-- The Executive Summary section below will only appear if Audience is Executive Summary -->
+```{r exec_summary, child=if (params$audience == "Executive Summary") '01_exec_summary.Rmd'}
+```
+
+<!-- The section below will appear for all Audiences except Executive Summary -->
+```{r background, child=if (params$audience != "Executive Summary") '02_background.Rmd'}
+```
+
+<!-- The section below will appear for all Audiences except Executive Summary -->
+```{r data_sources, child=if (params$audience != "Executive Summary") '03_data_sources.Rmd'}
+```
+
+
+# Assumptions
+List assumptions here to be included in every report, regardless of audience. 
+
+1. Assumption 1
+1. Assumption 2
+1. Assumption 3
+
+
+# Analysis
+We calculate here.  For `All Content + Code` audience, code is displayed as well. 
+
+```{r data_processing, echo=(params$audience == "All Content + Code")}
+# import, tidy, transform data
+
+```
+
+
+
+```{r calculations, echo=(params$audience == "All Content + Code")}
+dirty_fail_rate <- 0.70 
+daily_clean_fail_rate <- 0.86
+shiftchange_clean_fail_rate <- 0.91
+daily_qa_improvement <- (daily_clean_fail_rate - dirty_fail_rate) / dirty_fail_rate
+shiftchange_qa_improvement <- (shiftchange_clean_fail_rate - dirty_fail_rate) / dirty_fail_rate
+```
+
+# Results
+Results summary goes here. 
+
+# Conclusions
+Conclusions go here. 
+
+<!-- The section below will appear for all Audiences except Executive Summary -->
+```{r references, child=if (params$audience != "Executive Summary") '04_references.Rmd'}
+```
+
+<!-- The section below will appear for all Audiences except Executive Summary -->
+```{r appendices, child=if (params$audience != "Executive Summary") '05_appendices.Rmd'}
+```
+
